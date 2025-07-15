@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: two-tier-app
   labels:
-    name: two-tier-app
     app: two-tier-app
 spec:
   replicas: 1
@@ -17,10 +16,10 @@ spec:
     spec:
       containers:
         - name: two-tier-app
-          image: aryanprashant123/two-tier-app:latest
-          env: 
+          image: trainwithshubham/flaskapp:latest
+          env:
             - name: MYSQL_HOST
-              value: "10.98.19.211"          # this is your mysql's service clusture IP, Make sure to change it with yours
+              value: mysql          # this is your mysql's service clusture IP, Make sure to change it with yours
             - name: MYSQL_PASSWORD
               value: "admin"
             - name: MYSQL_USER
@@ -30,7 +29,3 @@ spec:
           ports:
             - containerPort: 5000
           imagePullPolicy: Always
-
-
-
-        

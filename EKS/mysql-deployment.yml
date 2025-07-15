@@ -3,9 +3,8 @@ kind: Deployment
 metadata:
   name: mysql
   labels:
-    name: mysql
     app: mysql
-spec: 
+spec:
   replicas: 1
   selector:
     matchLabels:
@@ -13,7 +12,6 @@ spec:
   template:
     metadata:
       labels:
-        name: mysql
         app: mysql
     spec:
       containers:
@@ -21,7 +19,10 @@ spec:
           image: mysql:latest
           env:
             - name: MYSQL_ROOT_PASSWORD
-              value: "admin"
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_ROOT_PASSWORD
             - name: MYSQL_DATABASE
               value: "mydb"
             - name: MYSQL_USER
@@ -31,9 +32,9 @@ spec:
           ports:
             - containerPort: 3306
           volumeMounts:
-            - name: mysqldata
-              mountPath: /var/lib/mysql         # this is your container path from where your data will be stored
+            - name: mysql-initdb
+              mountPath: docker-entrypoint-initdb.d
       volumes:
-        - name: mysqldata
-          persistentVolumeClaim:
-            claimName: mysql-pvc    # PVC claim name
+        - name: mysql-initdb
+          configMap:
+            name: mysql-initdb-config    # Config name
