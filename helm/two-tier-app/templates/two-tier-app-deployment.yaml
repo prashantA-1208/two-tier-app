@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: two-tier-app
+  labels:
+    app: two-tier-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: two-tier-app
+  template:
+    metadata:
+      labels:
+        app: two-tier-app
+    spec:
+      containers:
+        - name: two-tier-app
+          image: {{ .Values.flaskApp.image }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: {{ .Values.flaskApp.containerPort }}
+          env:
+            - name: MYSQL_HOST
+              value: {{ .Values.flaskApp.mysql.host }}
+            - name: MYSQL_USER
+              value: {{ .Values.flaskApp.mysql.user }}
+            - name: MYSQL_PASSWORD
+              value: {{ .Values.flaskApp.mysql.password }}
+            - name: MYSQL_DB
+              value: {{ .Values.flaskApp.mysql.database }}

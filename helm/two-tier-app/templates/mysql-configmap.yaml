@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.mysql.configMapName }}
+data:
+  init.sql: |
+{{ .Values.mysql.initSql | indent 4 }}
